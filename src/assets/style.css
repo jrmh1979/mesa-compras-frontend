@@ -1,0 +1,709 @@
+/* =========================
+   RESET Y BASE GENERAL
+========================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9fb;
+  color: #2f2f2f;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+}
+
+
+/* =========================
+   LAYOUT GENERAL
+========================= */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dashboard-main {
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* =========================
+   MENÚ LATERAL
+========================= */
+.sidebar {
+  width: 200px;
+  background-color: #2f3542;
+  color: white;
+  padding: 1rem;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.sidebar h3 {
+  margin: 1rem 0;
+  font-size: 18px;
+}
+
+.sidebar section {
+  margin-bottom: 1rem;
+}
+
+.sidebar button,
+.sidebar a {
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 0.4rem;
+  width: 100%;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sidebar button:hover,
+.sidebar a:hover {
+  background-color: #57606f;
+}
+
+
+/* =========================
+   BOTÓN HAMBURGUESA FIJO
+========================= */
+.sidebar-toggle {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: #2f2f2f;
+  z-index: 3000;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+
+.sidebar-toggle:hover,
+.sidebar-toggle:focus {
+  background: none !important;
+  border: none !important;
+  /*color: inherit !important;*/
+  transform: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Ocultar menú (afecta contenido) */
+.dashboard-container.menu-oculto .dashboard-main {
+  margin-left: 0 !important;
+}
+
+/* Cambia a blanco si el menú está visible */
+.dashboard-container:not(.menu-oculto) .sidebar-toggle {
+  color: white;
+}
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+/* =========================
+   url menu
+========================= */
+.sidebar ul {
+  list-style: none;
+  padding-left: 1rem;
+}
+
+.sidebar ul li {
+  margin: 0.3rem 0;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 0.3rem;
+  border-radius: 5px;
+}
+
+.sidebar a:hover {
+  background-color: #444;
+}
+
+/* Resalta el enlace activo si se desea */
+.sidebar a.active {
+  background-color: #1e90ff;
+}
+
+/* Opcional: icono flecha más claro */
+.sidebar button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.menu-oculto .sidebar {
+  transform: translateX(-100%);
+}
+
+.menu-oculto .dashboard-main {
+  margin-left: 0;
+}
+
+
+/* =========================
+   CONTENIDO PRINCIPAL AJUSTABLE
+========================= */
+.dashboard-main {
+  margin-left: 200px;
+  transition: margin-left 0.3s ease;
+  padding: 1rem;
+}
+
+
+/* =========================
+   FORMULARIOS UNIFICADOS
+========================= */
+/* 🎯 Estilo para INPUT */
+input {
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  height: 35px;
+  width: 330px;
+  padding: 0 0.5rem;
+  margin-bottom: 3px;
+  box-sizing: border-box;
+}
+
+/* 🎯 Estilo para SELECT */
+select {
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  height: 35px;
+  width: 220px;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
+
+/* Botones normales (formularios) */
+button {
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+  background-color: #3c8dbc;
+  color: white;
+  cursor: pointer;
+  padding: 0.4rem 1rem;
+  min-width: 120px;
+}
+
+/* Botones de acción pequeños */
+.botones-acciones {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.boton-accion {
+  padding: 6px 10px;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  min-width: unset;
+  width: auto;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input:focus,
+select:focus {
+  border-color: #3c8dbc;
+  box-shadow: 0 0 0 2px rgba(60, 141, 188, 0.2);
+  outline: none;
+}
+
+/* Eliminar flechas de number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* Botón */
+button {
+  background-color: #3c8dbc;
+  color: white;
+  border: none;
+  cursor: pointer;
+  min-width: 10px;
+  margin-inline: 10px;
+}
+button:hover {
+  background-color: #5fa4da;
+}
+
+
+/* =========================
+   FORM CARD & GROUPS
+========================= */
+.form-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-card h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.form-group > input,
+.form-group > select,
+.form-group > button {
+  flex: 1;
+  min-width: 160px;
+}
+
+/* ========================
+   TARJETA DE FILTROS
+======================== */
+.filtros-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.filtros-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.filtros-horizontal label {
+  font-weight: bold;
+}
+
+.filtros-horizontal input,
+.filtros-horizontal select {
+  min-width: 140px;
+  max-width: 200px;
+  width: auto;
+}
+
+/*Ajuste responsive en móviles*/
+
+@media (max-width: 767px) {
+  .form-group,
+  .filtros-horizontal {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group button,
+  .filtros-horizontal input,
+  .filtros-horizontal select {
+    width: 100%;
+  }
+
+}
+
+/* =========================
+   TABLAS
+========================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 14px;
+}
+
+table th, table td {
+  border: 1px solid #dcdcdc;
+  /*padding: 0.1rem;*/
+  text-align: left;
+  
+}
+
+table th {
+  background-color: #f1f1f1;
+}
+
+/* Estilo general para checkbox en tablas */
+.table-responsive input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #3c8dbc; /* Azul corporativo */
+  margin: auto;
+  display: block;
+}
+
+/* Centrar en la celda */
+td input[type="checkbox"] {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 767px) {
+  .form-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-responsive table {
+    min-width: 900px; /* o más si tienes muchas columnas */
+  }
+}
+/* =========================
+   TABLAS RESPONSIVE
+========================= */
+.table-responsive {
+  width: 100%;
+  max-height: 70vh;           /* 👈 Agregado: altura fija para activar scroll */
+  overflow-y: auto;           /* 👈 Scroll vertical */
+  overflow-x: auto;           /* 👈 Scroll horizontal si es necesario */
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+
+/* Asegura que la tabla ocupe su ancho natural */
+.table-responsive table {
+  width: 100%;
+  min-width: 1000px;
+  border-collapse: collapse;
+}
+
+table select {
+  width: 100%;
+  max-width: 120px;
+  min-width: 80px;
+  font-size: 13px;
+   /*padding: 0.25rem 0.4rem;*/
+}
+
+table input {
+  width: 100%;
+  max-width: 100px;
+  font-size: 13px;
+}
+
+/*para mover los titulos tabla*/
+thead th {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 10;
+  box-shadow: 0 2px 2px -1px rgba(0,0,0,0.1);
+}
+
+/* Si usas filtros arriba de la tabla */
+.filtros-fijos {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 11;
+  padding: 0.5rem;
+}
+
+
+
+/*Boton del Carrito*/
+button.carrito-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 18px;
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: auto !important;  /* 👈 esto anula la herencia del global */
+}
+
+/* Celda y botón del carrito */
+td.accion-compra {
+  text-align: center;
+  padding: 0.25rem;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.boton-carrito {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* ======= MODAL ESTILOS ======= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 350px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.modal label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.modal input,
+.modal select {
+  width: 100%;
+  margin-top: 0.3rem;
+  padding: 0.4rem;
+}
+
+.modal-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Resalta el registro seleccionado */
+.fila-activa {
+  background-color: #d9f1ff !important;
+  outline: 2px solid #6fb6e6;
+}
+
+.fila-activa-factura {
+  background-color: #d8f8d8 !important; /* verde muy suave */
+  outline: 2px solid #87d387; /* verde un poco más marcado para el borde */
+}
+
+/* =========================
+   LOGIN FORMULARIO ESTILO
+========================= */
+/* Estilo para inputs del login */
+.login-input {
+  all: unset;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+/* Estilo para el botón de login */
+.login-card-button {
+  all: unset;
+  display: block;
+  width: 100%;              /* Alineado con los inputs */
+  padding: 0.6rem;
+  background-color: #5fa4da;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;   /* Asegura que padding no rompa el ancho */
+  margin-top: 1rem;
+}
+
+.login-card-button:hover {
+  background-color: #2f3542;
+}
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom right, #f1f4f9, #2f3542);
+  padding: 2rem;
+}
+
+.login-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 1.5rem;
+  color: #2f3542;
+}
+
+.login-card input[type="text"],
+.login-card input[type="password"] {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.login-error {
+  color: red;
+  font-size: 14px;
+  margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 1.5rem;
+  }
+}
+
+.logo {
+  width: 300px;
+  height: 150px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 1rem auto; /* centrado y espacio debajo */
+}
+
+.footer {
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  padding: 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid #eee;
+  background: transparent;
+}
+
+/*MODAL CAJAS MIXTAS*/
+/* Versión ampliada del modal */
+.modal.mix {
+  max-width: 1100px;
+  width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Tabla dentro del modal de caja mixta */
+.modal.mix table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.modal.mix th,
+.modal.mix td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.modal.mix th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+/* Botones dentro del modal de mix */
+.modal.mix button {
+  margin-top: 1rem;
+  margin-right: 0.5rem;
+  padding: 6px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  background-color: #1976d2;
+  color: white;
+  transition: background-color 0.2s;
+}
+
+.modal.mix button:hover {
+  background-color: #125a9c;
+}
+
+/*RESALTA MIXTA*/
+.fila-mix-resaltada {
+  background-color: #ffe0b3 !important;
+  outline: 2px solid #ffa726;
+}
