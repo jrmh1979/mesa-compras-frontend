@@ -23,7 +23,14 @@ function PedidosLista() {
     idproducto: '',
     idvariedad: '',
     idlongitud: '',
+    codigo: '',            // Nuevo
+    idcliente: '',         // Actualizado según BD
+    observaciones: '',     // Nuevo
+    idOrder: '',           // Actualizado según BD
+    idproveedor: '',       // Actualizado según BD
+    precio_unitario: '',   // Actualizado según BD
   });
+  
 
   const fetchData = async () => {
     try {
@@ -237,26 +244,35 @@ const procesarPegado = async () => {
   };
 
   const pedidosFiltrados = pedidos.filter(p => {
-  const matchFactura = filtros.idfactura === '' || String(p.idfactura) === filtros.idfactura;
-  const matchProducto = filtros.idproducto === '' || String(p.idproducto) === filtros.idproducto;
-  const matchVariedad = filtros.idvariedad === '' || String(p.idvariedad) === filtros.idvariedad;
-  const matchLongitud = filtros.idlongitud === '' || String(p.idlongitud) === filtros.idlongitud;
-
-  const saldoCajas = parseFloat(p.cantidad || 0);
-  const saldoTallos = parseFloat(p.totaltallos || 0);
-
-  // ✅ solo mostrar pedidos con saldo positivo
-  return (
-    matchFactura &&
-    matchProducto &&
-    matchVariedad &&
-    matchLongitud &&
-    saldoCajas > 0 &&
-    saldoTallos > 0
-  );
-});
-
-    
+    const matchFactura = filtros.idfactura === '' || String(p.idfactura) === filtros.idfactura;
+    const matchProducto = filtros.idproducto === '' || String(p.idproducto) === filtros.idproducto;
+    const matchVariedad = filtros.idvariedad === '' || String(p.idvariedad) === filtros.idvariedad;
+    const matchLongitud = filtros.idlongitud === '' || String(p.idlongitud) === filtros.idlongitud;
+    const matchCodigo = filtros.codigo === '' || (p.codigo && p.codigo.toLowerCase().includes(filtros.codigo.toLowerCase()));
+    const matchCliente = filtros.idcliente === '' || String(p.idcliente) === filtros.idcliente;
+    const matchObservaciones = filtros.observaciones === '' || (p.observaciones && p.observaciones.toLowerCase().includes(filtros.observaciones.toLowerCase()));
+    const matchTipoPedido = filtros.idOrder === '' || String(p.idOrder) === filtros.idOrder;
+    const matchProveedor = filtros.idproveedor === '' || String(p.idproveedor) === filtros.idproveedor;
+    const matchPrecio = filtros.precio_unitario === '' || Number(p.precio_unitario) === Number(filtros.precio_unitario);
+    const saldoCajas = parseFloat(p.cantidad || 0);
+    const saldoTallos = parseFloat(p.totaltallos || 0);
+  
+    return (
+      matchFactura &&
+      matchProducto &&
+      matchVariedad &&
+      matchLongitud &&
+      matchCodigo &&
+      matchCliente &&
+      matchObservaciones &&
+      matchTipoPedido &&
+      matchProveedor &&
+      matchPrecio &&
+      saldoCajas > 0 &&
+      saldoTallos > 0
+    );
+  });
+   
   return (
     
     <div>
@@ -304,60 +320,122 @@ const procesarPegado = async () => {
   <div className="filtros-card">
   <div className="filtros-horizontal">
   <div>
-    <label>Pedido:</label>
+  <label>Pedido:</label>
+  <input
+    type='text'
+    value={filtros.idfactura}
+    onChange={e => setFiltros({ ...filtros, idfactura: e.target.value })}
+    placeholder="Buscar pedido"
+  />
+</div>
+  <div>
+    <label>Código:</label>
     <input
       type='text'
-      value={filtros.idfactura}
-      onChange={(e) => setFiltros({ ...filtros, idfactura: e.target.value })}
+      value={filtros.codigo}
+      onChange={e => setFiltros({ ...filtros, codigo: e.target.value })}
     />
   </div>
-
   <div>
-    <label>Producto:</label>
+    <label>Cliente:</label>
     <select
-      value={filtros.idproducto}
-      onChange={(e) => setFiltros({ ...filtros, idproducto: e.target.value })}
+      value={filtros.idcliente}
+      onChange={e => setFiltros({ ...filtros, idcliente: e.target.value })}
     >
       <option value=''>-- Todos --</option>
-      {catalogo.filter(c => c.categoria === 'producto')
-        .sort((a, b) => a.valor.localeCompare(b.valor))
-        .map(item => (
-          <option key={item.id} value={item.id}>{item.valor}</option>
-        ))}
+      {clientes.map(c => (
+        <option key={c.idtercero} value={c.idtercero}>
+          {c.nombre}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+    <label>Proveedor:</label>
+    <select
+      value={filtros.idproveedor}
+      onChange={e => setFiltros({ ...filtros, idproveedor: e.target.value })}
+    >
+      <option value=''>-- Todos --</option>
+      {proveedores.map(prov => (
+        <option key={prov.idtercero} value={prov.idtercero}>
+          {prov.nombre}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+  <label>Producto:</label>
+  <select
+    value={filtros.idproducto}
+    onChange={e => setFiltros({ ...filtros, idproducto: e.target.value })}
+  >
+    <option value=''>-- Todos --</option>
+    {catalogo.filter(c => c.categoria === 'producto').map(prod => (
+      <option key={prod.id} value={prod.id}>
+        {prod.valor}
+      </option>
+    ))}
+  </select>
+</div>
+<div>
+  <label>Variedad:</label>
+  <select
+    value={filtros.idvariedad}
+    onChange={e => setFiltros({ ...filtros, idvariedad: e.target.value })}
+  >
+    <option value=''>-- Todas --</option>
+    {catalogo.filter(c => c.categoria === 'variedad').map(variedad => (
+      <option key={variedad.id} value={variedad.id}>
+        {variedad.valor}
+      </option>
+    ))}
+  </select>
+</div>
+<div>
+  <label>Longitud:</label>
+  <select
+    value={filtros.idlongitud}
+    onChange={e => setFiltros({ ...filtros, idlongitud: e.target.value })}
+  >
+    <option value=''>-- Todas --</option>
+    {catalogo.filter(c => c.categoria === 'longitud').map(longitud => (
+      <option key={longitud.id} value={longitud.id}>
+        {longitud.valor}
+      </option>
+    ))}
+  </select>
+</div>
+  <div>
+    <label>Observaciones:</label>
+    <input
+      type='text'
+      value={filtros.observaciones}
+      onChange={e => setFiltros({ ...filtros, observaciones: e.target.value })}
+    />
+  </div>
+  <div>
+    <label>Tipo Pedido:</label>
+    <select
+      value={filtros.idOrder}
+      onChange={e => setFiltros({ ...filtros, idOrder: e.target.value })}
+    >
+      <option value=''>-- Todos --</option>
+      {catalogo.filter(c => c.categoria === 'tipopedido').map(tp => (
+        <option key={tp.id} value={tp.id}>{tp.valor}</option>
+      ))}
     </select>
   </div>
 
   <div>
-    <label>Variedad:</label>
-    <select
-      value={filtros.idvariedad}
-      onChange={(e) => setFiltros({ ...filtros, idvariedad: e.target.value })}
-    >
-      <option value=''>-- Todas --</option>
-      {catalogo.filter(c => c.categoria === 'variedad')
-        .sort((a, b) => a.valor.localeCompare(b.valor))
-        .map(item => (
-          <option key={item.id} value={item.id}>{item.valor}</option>
-        ))}
-    </select>
-  </div>
-
-  <div>
-    <label>Longitud:</label>
-    <select
-      value={filtros.idlongitud}
-      onChange={(e) => setFiltros({ ...filtros, idlongitud: e.target.value })}
-    >
-      <option value=''>-- Todas --</option>
-      {catalogo.filter(c => c.categoria === 'longitud')
-        .sort((a, b) => a.valor.localeCompare(b.valor))
-        .map(item => (
-          <option key={item.id} value={item.id}>{item.valor}</option>
-        ))}
-    </select>
+    <label>Precio Unitario:</label>
+    <input
+      type='number'
+      value={filtros.precio_unitario}
+      onChange={e => setFiltros({ ...filtros, precio_unitario: e.target.value })}
+    />
   </div>
 </div>
-
       </div>
 
       {modoPegado && (
@@ -391,13 +469,14 @@ const procesarPegado = async () => {
     <th>Pedido</th>
     <th>Código</th>
     <th>Cliente</th>
-    <th>Observaciones</th>
+    <th>Obs.</th>
     <th>Proveedor</th>
     <th>Producto</th>
     <th>Variedad</th>
-    <th>Longitud</th>
-    <th>Empaque</th>
-    <th>Cantidad</th>
+    <th>Long.</th>
+    <th>Emp.</th>
+    <th>Cant.</th>
+    <th>Caja</th>
     <th>Tallos</th>
     <th>Total tallos</th>
     <th>Tipo pedido</th>
@@ -431,6 +510,7 @@ const procesarPegado = async () => {
       <td>{renderSelect(p.idlongitud, 'longitud', p.idpedido, 'idlongitud')}</td>
       <td>{renderSelect(p.idempaque, 'empaque', p.idpedido, 'idempaque')}</td>
       <td>{p.cantidad}</td>
+      <td>{catalogo.find(c => c.id === p.idtipocaja && c.categoria === 'tipocaja')?.valor || '-'}</td>
       <td>{p.tallos}</td>
       <td>{p.totaltallos}</td>
       <td>{renderSelect(p.idOrder, 'tipopedido', p.idpedido, 'idOrder')}</td>

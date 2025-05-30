@@ -10,13 +10,15 @@ function ModalCompra({ visible, pedido, onClose, onCompraExitosa }) {
     cantidad: pedido?.cantidad || 0,
     precio_unitario: ''
   });
+  const [cantidadAnterior, setCantidadAnterior] = useState(pedido?.cantidad || 0);
 
   useEffect(() => {
     setForm({
-      idtipocaja: '',
+      idtipocaja: pedido?.idtipocaja || '',
       cantidad: pedido?.cantidad || 0,
       precio_unitario: ''
     });
+    setCantidadAnterior(pedido?.cantidad || 0);
   }, [pedido]);
 
   useEffect(() => {
@@ -37,7 +39,25 @@ function ModalCompra({ visible, pedido, onClose, onCompraExitosa }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+
+    if (name === 'cantidad') {
+      const nuevaCantidad = parseFloat(value);
+      if (isNaN(nuevaCantidad) || nuevaCantidad <= 0) {
+        setForm({ ...form, cantidad: '' });
+        return;
+      }
+
+      if (nuevaCantidad > pedido.cantidad) {
+        alert('⚠️ No puedes comprar más cajas de las pedidas.');
+        setForm({ ...form, cantidad: cantidadAnterior });
+        return;
+      }
+
+      setForm({ ...form, cantidad: nuevaCantidad });
+      setCantidadAnterior(nuevaCantidad);
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   const handleSubmit = async () => {
