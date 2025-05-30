@@ -322,39 +322,59 @@ button:hover {
 
 .filtros-horizontal {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: flex-end;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap; /* evita saltos de línea por defecto */
+  overflow-x: auto;
 }
 
 .filtros-horizontal label {
   font-weight: bold;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
-.filtros-horizontal input,
+.filtros-horizontal input[type="text"],
+.filtros-horizontal input[type="number"],
 .filtros-horizontal select {
-  min-width: 140px;
-  max-width: 200px;
-  width: auto;
+  height: 26px;
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 1;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+  width: 99px;
 }
 
-/*Ajuste responsive en móviles*/
+/* Expandir ligeramente al hacer foco o desplegar el select */
+.filtros-horizontal select:focus,
+.filtros-horizontal input[type="text"]:focus,
+.filtros-horizontal input[type="number"]:focus {
+  width: 160px;
+  height: 28px;
+  padding: 4px 8px;
+  font-size: 13px;
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 3px rgba(74, 144, 226, 0.5);
+}
 
+/* Ajuste responsive en móviles */
 @media (max-width: 767px) {
-  .form-group,
   .filtros-horizontal {
     flex-direction: column;
     align-items: stretch;
+    overflow-x: unset; /* quita scroll horizontal en móviles */
   }
 
-  .form-group input,
-  .form-group select,
-  .form-group button,
-  .filtros-horizontal input,
+  .filtros-horizontal input[type="text"],
+  .filtros-horizontal input[type="number"],
   .filtros-horizontal select {
-    width: 100%;
+    width: 100%; /* ancho completo en móvil */
+    height: 32px; /* altura ligeramente mayor para facilidad táctil */
+    font-size: 14px;
+    padding: 4px 8px;
   }
-
 }
 
 /* =========================
